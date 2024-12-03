@@ -132,3 +132,5 @@ for i, design in enumerate(top_designs, 1):
 
 #put in the materials
 #have it use the right curve for different materials
+
+#can i edit?
