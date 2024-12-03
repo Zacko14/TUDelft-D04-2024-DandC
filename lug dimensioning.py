@@ -4,7 +4,9 @@ import numpy as np
 
 # Material properties (in metric units)
 materials = [
-
+    {"name": "4130 Steel", "Fty": 460, "density": 7850, "curve": "curve_151"},  # MPa, kg/m3
+    {"name": "8630 Steel", "Fty": 550, "density": 7850, "curve": "curve_151"},    #MPa, kg/m3
+    {"name": "2014-T6", "Fty": 414, "density": 2800, "curve": "curve_158"},    #MPa, kg/m3
     {"name": "7075-T6", "Fty": 503, "density": 2810, "curve": "curve_158"}    #MPa, kg/m3
 
 ]
