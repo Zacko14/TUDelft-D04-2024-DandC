@@ -6,6 +6,8 @@ from copy import deepcopy
 # version: 0.3
 # date: 2024-11-28
 
+# change test
+
 #process:
 # use a rough monte carlo method to get an approximate minimum.
 # then use gradient descent to find the local minimum
