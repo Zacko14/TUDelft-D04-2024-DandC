@@ -57,7 +57,7 @@ class Setup():
        
         
         # Mass calculations
-        lug_mass = W * H * self.thickness_lug * material_list[self.material_lug][1]  # (kg)
+        lug_mass = HEIGHT * WIDTH * self.thickness_lug * material_list[self.material_lug][1]  # (kg)
         total_fastener_mass = self.n_pairs* 2 * fastener_mass  # (kg)
         total_mass = lug_mass + total_fastener_mass
         return total_mass
@@ -247,14 +247,15 @@ material_list=[
 ]
 '''name,density,max stress'''
 # Lug dimensions (back-up wall)
-W = 0.5  # x-axis (m)
-H = 0.3  # z-axis (m)
+WIDTH = 0.030167  # z-axis (m)
+HEIGHT = WIDTH*2  # x-axis (m)
+
 
 # Design Constraints
 max_fasteners = 10
 max_pairs = max_fasteners // 2
-x_min, x_max = 0, W / 2    # m (the/2 for symmetry)
-z_min, z_max = 0, H        # m
+x_min, x_max = 0, HEIGHT / 2    # m (the/2 for symmetry)
+z_min, z_max = 0, WIDTH        # m
 D_min, D_max = 0.001, 0.01  # m
 thickness_range = [0.01, 0.05] # m
 
