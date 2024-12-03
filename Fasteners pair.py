@@ -138,7 +138,6 @@ class Setup():
         currently modifies thickness and the position, diameter of the fasteners"""
 
         #get the partial derivatives of each section and move the design in that direction
-        total_delta_mass = 500
         step_size = 1e-2 # for actually moving the value
         delta_step = 1e-5 #for testing the derivative
         debug_count = 0 #counts number of iterations
