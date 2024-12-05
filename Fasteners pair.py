@@ -238,12 +238,7 @@ fastener_head_ratio = 0.5
 safety_factor = 1.5
 #name, density, max stress
 material_list=[
-    ["Aluminium 2014-T6", 2796, 414e6],
-    ["Aluminium 7075-T6", 2823, 450e6],
-    ["Steel 4130", 7850, 435e6],
-    ["Steel 8630", 7850, 550e6],
-    ["Magnesium AZ91C-T6", 1810, 145e6],
-    ["Aluminium 356.0-T6", 2671, 152e6]
+    ["Aluminium 7075-T6", 2823, 450e6]
 ]
 '''name,density,max stress'''
 # Lug dimensions (back-up wall)
