@@ -1,2 +1,2 @@
-This is a readme for D04. don't know what to put here
-i think you might need to request access somehow, so do that i guess...
+This is the code used in WP4 of AE2111-I Design and Construction.
+Created by group D04
