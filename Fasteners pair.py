@@ -1,7 +1,7 @@
 import numpy as np
 from copy import deepcopy
 
-# authors: Johannes Nilsson, __insert here__ of D04
+# authors: Johannes Nilsson, Andrés Nieto González of D04
 # prupose: iteratively find best fastener setup for the lug
 # version: 0.3
 # date: 2024-11-28
