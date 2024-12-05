@@ -2,9 +2,9 @@ import numpy as np
 from copy import deepcopy
 
 # authors: Johannes Nilsson, Andrés Nieto González of D04
-# prupose: iteratively find best fastener setup for the lug
+# purpose: Iteratively find best fastener setup for the lug
 # version: 0.4
-# date: 2024-11-28
+# creation date: 2024-11-28
 
 
 #process:
@@ -64,8 +64,8 @@ class Setup():
     
     def force_check(self):
         """Checks if all the forces are under the limit"""
-         # Find CG of the fasteners
-        #x_cg = sum(f.area * f.posx for f in self.fasteners) / Area_fasteners_total
+        # Find CG of the fasteners
+        # x_cg = sum(f.area * f.posx for f in self.fasteners) / Area_fasteners_total
         x_cg = 0 #since we assume symmetry around z axis
         z_cg = sum(f.area * f.posz for f in self.fasteners) / self.Area_fasteners_total
 
@@ -104,19 +104,19 @@ class Setup():
         if self.max_bearing_stress > material_list[self.material_lug][2] * safety_factor:
             self.under_force_limit = False
 
-        #check pull through 
+        #check pull through: according to eq (3.4-3.5)
 
         F_pi = F_x/(self.n_pairs*2)
         denominator = sum(f.area * radius(f)**2 for f in self.fasteners)
 
-        for f in self.fasteners: #(4.6-4.7)
+        for f in self.fasteners: #(3.4-3.5)
             F_pMz = (M_x * f.area * radius(f)) / denominator
             f.F_pull_through = F_pi + F_pMz
 
         self.max_pull_through = max(f.F_pull_through for f in self.fasteners)
 
-        #now find if the walls themselves resist the load
-        #assuming the same diameter for the hole and the fastener itself
+        # now find if the walls themselves resist the load
+        # assuming the same diameter for the hole and the fastener itself
         for f in self.fasteners:
 
             crown_area = (np.pi/4)*((f.diameter*(1+fastener_head_ratio))**2-f.diameter**2)
@@ -209,15 +209,10 @@ class Setup():
                 self = old_design
 
             #lower step size to slowly bring it to equilibrium
-            step_size *= 0.5
+            step_size *= 0.6 #slightly above 0.5 to ensure it doesn't fall short
             debug_count += 1
         #process complete
         print(f"Debug: {debug_count} iterations before completion")
-
-        return #it edits in place so no need to return anything
-        
-
-
 
 
     def __repr__(self) -> str:
@@ -243,7 +238,7 @@ material_list=[
 '''name,density,max stress'''
 # Lug dimensions (back-up wall)
 WIDTH = 0.030167  # z-axis (m)
-HEIGHT = WIDTH*2  # x-axis (m)
+HEIGHT = WIDTH*2  # x-axis (m) (assume an aspect ratio of 2:1)
 
 
 # Design Constraints
