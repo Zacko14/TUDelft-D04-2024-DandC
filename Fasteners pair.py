@@ -3,7 +3,7 @@ from copy import deepcopy
 
 # authors: Johannes Nilsson, Andrés Nieto González of D04
 # purpose: Iteratively find best fastener setup for the lug
-# version: 0.4
+# version: 0.5
 # creation date: 2024-11-28
 
 
@@ -35,7 +35,7 @@ class Setup():
         diameter = np.random.uniform(D_min,D_max)
         fasteners = []
         for i in range(n_pairs):
-            fasteners.append(Fastener(np.random.uniform(x_min + diameter, x_max - diameter), np.random.uniform(z_min + diameter, z_max- diameter), diameter)) 
+            fasteners.append(Fastener(np.random.uniform(x_min + diameter*fastener_distance_ratio_edge, x_max - diameter*fastener_distance_ratio_edge), np.random.uniform(z_min + diameter*fastener_distance_ratio_edge, z_max- diameter*fastener_distance_ratio_edge), diameter)) 
             #+- diameter to make sure it doesn't intersect with the edge
         new_setup = Setup(n_pairs,
                           np.random.uniform(*thickness_range),  # lug thickness (m)
@@ -43,6 +43,23 @@ class Setup():
                           mat_lug=np.random.randint(0,len(material_list))
                           )
         return new_setup
+
+    def fastener_position_check(self):
+        """checks that postion requirements of the positioning"""
+        # check the edge spacing
+        for f in self.fasteners:
+            edge_space = f.diameter*fastener_distance_ratio_edge
+            if not ((edge_space < f.posx < (HEIGHT - edge_space)) and (edge_space < f.posz < (WIDTH - edge_space))):
+                return False
+            
+        # check the distance spacing
+        for f in self.fasteners:
+            for g in self.fasteners:
+                if f == g: continue
+                distance = np.sqrt((f.posx - g.posx)**2 + (f.posz - g.posz)**2)
+                if distance < f.diameter*fastener_distance_ratio_other:
+                    return False
+        return True #no check failed, it works
 
 
     def eval_mass(self):
@@ -207,6 +224,10 @@ class Setup():
             self.force_check()
             if self.under_force_limit == False:
                 self = old_design
+            
+            #check the positions:
+            if self.fastener_position_check() == False:
+                self = old_design
 
             #lower step size to slowly bring it to equilibrium
             step_size *= 0.6 #slightly above 0.5 to ensure it doesn't fall short
@@ -242,7 +263,9 @@ HEIGHT = WIDTH*2  # x-axis (m) (assume an aspect ratio of 2:1)
 
 
 # Design Constraints
-max_fasteners = 10
+fastener_distance_ratio_edge = 1.5 #the diameters required from the edge
+fastener_distance_ratio_other = 3 #the diameters required from other fasteners
+max_fasteners = 4
 max_pairs = max_fasteners // 2
 x_min, x_max = 0, HEIGHT / 2    # m (the/2 for symmetry)
 z_min, z_max = 0, WIDTH        # m
@@ -260,9 +283,19 @@ for _ in range(iterations):
     # Randomly generate a design
     tested_setup = Setup.gen_monte_carlo()
     mass = tested_setup.eval_mass()
+
+    #check pull through force:
     tested_setup.force_check()
+    if tested_setup.under_force_limit == False:
+        continue # Too high pullthrough stress
+
+    #check bearing stress:
     if tested_setup.max_bearing_stress > max_bearing_stress:
         continue #too high bearing stress
+    
+    #check positioning: (deemed unneccesary)
+    #if tested_setup.fastener_position_check() == False:
+    #    continue #invalid placement
 
     # Check if this design is better than previous
     if mass < best_mass:
