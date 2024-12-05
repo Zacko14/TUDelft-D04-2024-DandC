@@ -228,7 +228,7 @@ class Setup():
 # Constants
 F_x = 366.3/2
 F_z = 1424.4/2
-M_x = 57.2
+M_x = 940
 fastener_mass = 0.04  # kg
 density = 2810  # aluminum 7075-T6 (kg/m^3)
 max_bearing_stress = 300e6  # 450 yield stress and S.F. = 1.5
