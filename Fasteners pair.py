@@ -3,7 +3,7 @@ from copy import deepcopy
 
 # authors: Johannes Nilsson, Andrés Nieto González of D04
 # prupose: iteratively find best fastener setup for the lug
-# version: 0.3
+# version: 0.4
 # date: 2024-11-28
 
 
