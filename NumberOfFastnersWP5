@@ -1,0 +1,34 @@
+import numpy as np
+
+n = 2
+n_condition = False
+
+while n_condition == False:
+    hinge_angle_change = 2*np.pi/n
+
+    MaximumPullThroughx = 100
+    MaximumPullThroughy = 50
+    MaximumPullThroughz = 10
+
+    i=0
+    Fx, Fy, Fz = 0, 0, 0
+
+    while i < n:
+        hinge_angle = hinge_angle_change * n
+        Fx += abs(MaximumPullThroughx * np.sin(hinge_angle)) + abs(MaximumPullThroughy * np.cos(hinge_angle))
+        Fy += abs(MaximumPullThroughy * np.sin(hinge_angle)) + abs(MaximumPullThroughx * np.cos(hinge_angle))
+        Fz += 2 * MaximumPullThroughz
+        i += 1
+
+    print(Fx, Fy, Fz)
+
+    m = 10
+    ax, ay, az = 10, 10,10
+    Fx1, Fy1, Fz1 = m * ax, m * ay, m * az
+    
+    if Fx/Fx1 < 1 or Fy/Fy1 < 1 or Fz/Fz1 < 1:
+        n += 1
+    else:
+        n_condition = True
+        print(n, hinge_angle_change*360/(2*np.pi))
+        
